@@ -1,0 +1,87 @@
+html {
+    background-color: black;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.dial-sequence {
+    width: 1520px;
+    height: 200px;
+    padding: 10px;
+    border: 2px solid #be4616;
+    margin: 0 auto 20px auto;
+    transition-property: border;
+    transition-duration: 1s;
+}
+
+    .dial-sequence .chevron:last-child {
+        margin-right: 0
+    }
+
+    .dial-sequence.dialing {
+        border: 2px solid red;
+    }
+
+        .dial-sequence .chevron {
+            width: 200px;
+            height: 200px;
+            transform: scale(2);
+            opacity: 0;
+            border: 1px solid green;
+            margin-right: 10px;
+            cursor: auto;
+            position: relative;
+            transition-property: transform,opacity;
+            transition-duration: 1s;
+            transition-timing-function: ease-in-out;
+        }
+
+            .dial-sequence .chevron.show {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+
+
+.chevrons {
+    max-width: 1460px;
+    margin: 0 auto;
+}
+
+.chevron {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #1b4dbe;
+    margin: 0 5px 5px;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .chevron:last-child {
+        margin-right: 0;
+    }
+
+    .chevron img {
+        filter: invert(1);
+        width: 100%;
+        height: 100%;
+    }
+
+.animations {
+    clear: both;
+    text-align: center;
+    max-width: 1470px;
+    margin: 0 auto;
+}
+
+.animation {
+    display: inline-block;
+    border: 1px solid #00563f;
+    padding: 10px;
+    font-size: 22pt;
+    width: 200px;
+    margin: 50px 10px 0 0;
+    text-align: center;
+    cursor: pointer;
+}

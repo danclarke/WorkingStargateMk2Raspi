@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <!-- Chevrons from Manz: https://codepen.io/manz/pen/zoREJL -->
+        <meta charset="UTF-8"> 
+        <title>Stargate Command</title>
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+        <div class="dial-sequence">
+        </div>
+
+        <div class="chevrons">
+            <div class="chevron" num="0"><img src="chevrons/001.svg" /></div>
+            <div class="chevron" num="1"><img src="chevrons/002.svg" /></div>
+            <div class="chevron" num="2"><img src="chevrons/003.svg" /></div>
+            <div class="chevron" num="3"><img src="chevrons/004.svg" /></div>
+            <div class="chevron" num="4"><img src="chevrons/005.svg" /></div>
+            <div class="chevron" num="5"><img src="chevrons/006.svg" /></div>
+            <div class="chevron" num="6"><img src="chevrons/007.svg" /></div>
+            <div class="chevron" num="7"><img src="chevrons/008.svg" /></div>
+            <div class="chevron" num="8"><img src="chevrons/009.svg" /></div>
+            <div class="chevron" num="9"><img src="chevrons/010.svg" /></div>
+            <div class="chevron" num="10"><img src="chevrons/011.svg" /></div>
+            <div class="chevron" num="11"><img src="chevrons/012.svg" /></div>
+            <div class="chevron" num="12"><img src="chevrons/013.svg" /></div>
+            <div class="chevron" num="13"><img src="chevrons/014.svg" /></div>
+            <div class="chevron" num="14"><img src="chevrons/015.svg" /></div>
+            <div class="chevron" num="15"><img src="chevrons/016.svg" /></div>
+            <div class="chevron" num="16"><img src="chevrons/017.svg" /></div>
+            <div class="chevron" num="17"><img src="chevrons/018.svg" /></div>
+            <div class="chevron" num="18"><img src="chevrons/019.svg" /></div>
+            <div class="chevron" num="19"><img src="chevrons/020.svg" /></div>
+            <div class="chevron" num="20"><img src="chevrons/021.svg" /></div>
+            <div class="chevron" num="21"><img src="chevrons/022.svg" /></div>
+            <div class="chevron" num="22"><img src="chevrons/023.svg" /></div>
+            <div class="chevron" num="23"><img src="chevrons/024.svg" /></div>
+            <div class="chevron" num="24"><img src="chevrons/025.svg" /></div>
+            <div class="chevron" num="25"><img src="chevrons/026.svg" /></div>
+            <div class="chevron" num="26"><img src="chevrons/027.svg" /></div>
+            <div class="chevron" num="27"><img src="chevrons/028.svg" /></div>
+            <div class="chevron" num="28"><img src="chevrons/029.svg" /></div>
+            <div class="chevron" num="29"><img src="chevrons/030.svg" /></div>
+            <div class="chevron" num="30"><img src="chevrons/031.svg" /></div>
+            <div class="chevron" num="31"><img src="chevrons/032.svg" /></div>
+            <div class="chevron" num="32"><img src="chevrons/033.svg" /></div>
+            <div class="chevron" num="33"><img src="chevrons/034.svg" /></div>
+            <div class="chevron" num="34"><img src="chevrons/035.svg" /></div>
+            <div class="chevron" num="35"><img src="chevrons/036.svg" /></div>
+            <div class="chevron" num="36"><img src="chevrons/037.svg" /></div>
+            <div class="chevron" num="37"><img src="chevrons/038.svg" /></div>
+            <div class="chevron" num="38"><img src="chevrons/039.svg" /></div>
+        </div>
+
+        <div class="animations">
+            <div class="animation" anim="0">
+                Chase
+            </div>
+            <div class="animation" anim="1">
+                Ring
+            </div>
+        </div>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript">
+            let dialSeq = [];
+            let enableDialing = true;
+
+            function dial() {
+                enableDialing = false;
+
+                $('.dial-sequence').addClass('dialing');
+
+                $.post({
+                    url: 'http://192.168.0.34/update',
+                    data: JSON.stringify({
+                        anim: 2,
+                        sequence: dialSeq
+                    })
+                })
+                .fail(function() {
+                    alert('Could not send dialling sequence!');
+                })
+                .always(function() { 
+                    dialSeq = [];
+                    $('.dial-sequence').html('');
+                    $('.dial-sequence').removeClass('dialing');
+                    enableDialing = true;
+                });
+            }
+
+            $('div.chevrons div.chevron').click(function() {
+                if (!enableDialing)
+                    return;
+
+                const num = +$(this).attr('num');
+                const html = $(this).clone().wrap('<div/>').parent().html();
+
+                const existing = dialSeq.findIndex(function(s){ return s === num; });
+                if (existing >= 0)
+                    return;
+
+                dialSeq.push(num);
+                const newChevron = $(html);
+                newChevron.attr('style', 'transform: rotate(0);');
+                $('.dial-sequence').append(newChevron);
+                setTimeout(function() { newChevron.addClass('show'); }, 10);
+
+                if (dialSeq.length === 7) {
+                    enableDialing = false;
+                    setTimeout(function() { dial(); }, 1200);
+                }
+            });
+
+            $('div.animations div.animation').click(function() {
+                const anim = +$(this).attr('anim');
+
+                $.post({
+                    url: 'http://192.168.0.34/update',
+                    data: JSON.stringify({
+                        anim: anim
+                    })
+                })
+                .fail(function() {
+                    alert('Could not send animation request!');
+                });
+            });
+
+        </script>
+    </body>
+</html>
