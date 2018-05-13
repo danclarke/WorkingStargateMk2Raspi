@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+from Daemon import Daemon
 from LightingControl import LightingControl
 from StargateControl import StargateControl
 from DialProgram import DialProgram
@@ -6,6 +9,7 @@ from StargateLogic import StargateLogic
 from WebServer import StargateHttpHandler
 from BaseHTTPServer import HTTPServer
 import threading
+import sys
 
 #
 # Working Stargate Mk2 by Glitch, code by Dan Clarke
@@ -44,15 +48,39 @@ stargate_control.quick_calibration()
 # Run this to TEST the dial sequence
 # dialProgram.dial([26, 6, 14, 31, 11, 29, 0])
 
-# Web control
-print('Running web server...')
-StargateHttpHandler.logic = logic
-httpd = HTTPServer(('', 80), StargateHttpHandler)
+# Background running in Daemon
 
-httpd_thread = threading.Thread(name="HTTP", target=httpd.serve_forever)
-httpd_thread.setDaemon(True)
-httpd_thread.start()
 
-# Infinite loop doing stuff
-logic.loop()
+class StargateDaemon(Daemon):
+    def run(self):
+        while True:
+            # Web control
+            print('Running web server...')
+            StargateHttpHandler.logic = logic
+            httpd = HTTPServer(('', 80), StargateHttpHandler)
 
+            httpd_thread = threading.Thread(name="HTTP", target=httpd.serve_forever)
+            httpd_thread.setDaemon(True)
+            httpd_thread.start()
+
+            # Infinite loop doing stuff
+            print('Running logic...')
+            logic.loop()
+
+
+if __name__ == "__main__":
+        daemon = StargateDaemon('/tmp/daemon-stargate.pid')
+        if len(sys.argv) == 2:
+                if 'start' == sys.argv[1]:
+                        daemon.start()
+                elif 'stop' == sys.argv[1]:
+                        daemon.stop()
+                elif 'restart' == sys.argv[1]:
+                        daemon.restart()
+                else:
+                        print "Unknown command"
+                        sys.exit(2)
+                sys.exit(0)
+        else:
+                print "usage: %s start|stop|restart" % sys.argv[0]
+                sys.exit(2)
