@@ -21,11 +21,5 @@ class StargateHttpHandler(SimpleHTTPRequestHandler):
         content_len = int(self.headers.getheader('content-length', 0))
         body = self.rfile.read(content_len)
         data = json.loads(body)
-        anim = data['anim']
-
-        if anim == 2:
-            StargateHttpHandler.dial_program.dial(data['sequence'])
-            self.send_response(200, 'OK')
-            return
-
-        self.send_error(500, 'Unsupported request')
+        StargateHttpHandler.logic.execute_command(data)
+        self.send_response(200, 'OK')

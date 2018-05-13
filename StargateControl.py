@@ -15,13 +15,13 @@ class StargateControl:
     mh = Adafruit_MotorHAT()
     motor_gate = mh.getStepper(200, config.motor_gate)
     motor_chevron = mh.getStepper(200, config.motor_chevron)
-    current_symbol = 0
-    steps_per_symbol = config.cal_steps_per_symbol
 
     def __init__(self, lighting):
         self.lighting = lighting
         self.motor_gate.setSpeed(config.motor_rpm)
         self.motor_chevron.setSpeed(config.motor_rpm)
+        self.current_symbol = 0
+        self.steps_per_symbol = config.cal_steps_per_symbol
 
         self.cal_led.off()
 

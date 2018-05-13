@@ -2,8 +2,10 @@ from LightingControl import LightingControl
 from StargateControl import StargateControl
 from DialProgram import DialProgram
 from StargateAudio import StargateAudio
+from StargateLogic import StargateLogic
 from WebServer import StargateHttpHandler
 from BaseHTTPServer import HTTPServer
+import threading
 
 #
 # Working Stargate Mk2 by Glitch, code by Dan Clarke
@@ -25,6 +27,7 @@ audio = StargateAudio()
 light_control = LightingControl()
 stargate_control = StargateControl(light_control)
 dial_program = DialProgram(stargate_control, light_control, audio)
+logic = StargateLogic(audio, light_control, stargate_control, dial_program)
 
 # Run this FIRST to get the chevron lighting order
 # lightControl.cycle_chevrons()
@@ -38,13 +41,18 @@ dial_program = DialProgram(stargate_control, light_control, audio)
 # Run this NORMALLY to home the gate at start up
 stargate_control.quick_calibration()
 
+# Run this to TEST the dial sequence
+# dialProgram.dial([26, 6, 14, 31, 11, 29, 0])
+
 # Web control
-
-# Assign dependencies to handler, globally
-StargateHttpHandler.dial_program = dial_program
-
 print('Running web server...')
+StargateHttpHandler.logic = logic
 httpd = HTTPServer(('', 80), StargateHttpHandler)
-httpd.serve_forever()
 
-#dialProgram.dial([26, 6, 14, 31, 11, 29, 0])
+httpd_thread = threading.Thread(name="HTTP", target=httpd.serve_forever)
+httpd_thread.setDaemon(True)
+httpd_thread.start()
+
+# Infinite loop doing stuff
+logic.loop()
+
