@@ -39,16 +39,16 @@ motor_gate = 2
 motor_chevron = 1
 
 # RPM for the motors
-motor_rpm = 120
+motor_rpm = 100
 
 # Drive method for motors
 motor_drive = Adafruit_MotorHAT.MICROSTEP
 
 # 'Forward' direction for stargate
-gate_forward = Adafruit_MotorHAT.BACKWARD
+gate_forward = Adafruit_MotorHAT.FORWARD
 
 # 'Backward' direction for stargate
-gate_backward = Adafruit_MotorHAT.FORWARD
+gate_backward = Adafruit_MotorHAT.BACKWARD
 
 # 'Forward' direction for chevron
 chevron_forward = Adafruit_MotorHAT.FORWARD
@@ -63,10 +63,13 @@ cal_brightness = 800
 cal_percentage = 150
 
 # Number of steps of the motor per full symbol movement
-cal_steps_per_symbol = 15.46153846153846
+cal_steps_per_symbol = 15.46153846153846 * 2  # x2 because reasons
 
 # Steps for the top chevron lock
-steps_chevron_lock = 10
+steps_chevron_lock = 9
+
+# Number of steps for a full rotation of the gate
+num_steps_circle = 603
 
 # Settings you shouldn't need to change
 
@@ -79,7 +82,6 @@ home_initial_reverse = cal_steps_per_symbol * 2  # Number of steps to move backw
 
 num_symbols = 39
 num_chevrons = 9
-num_steps_circle = 603
 top_chevron = 4
 
 chevron_light_order = [5, 6, 7, 1, 2, 3, 0, 8]  # Order Chevrons will light up when dialing

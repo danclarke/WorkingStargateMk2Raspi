@@ -56,7 +56,8 @@ class StargateControl:
         # Success
         self.lighting.all_off()
         self.cal_led.off()
-        self.steps_per_symbol = float(step) / float(config.num_symbols)
+        # Absolutely no idea why this is off by a factor of 2...
+        self.steps_per_symbol = (float(step) / float(config.num_symbols)) * 2.0
         print('Num steps: {}'.format(step))
         print('Steps per symbol: {:f}'.format(self.steps_per_symbol))
         self.current_symbol = 0
@@ -123,15 +124,17 @@ class StargateControl:
         motor_direction = config.gate_forward
         delta = 0
 
-        if (direction == self.FORWARD):
-            delta = index - self.current_symbol
-            if delta < 0:
-                delta += config.num_symbols
+        if direction == self.FORWARD:
+            if index >= self.current_symbol:
+                delta = index - self.current_symbol
+            else:
+                delta = (config.num_symbols - self.current_symbol) + index
         else:
             motor_direction = config.gate_backward
-            delta = self.current_symbol - index
-            if delta < 0:
-                delta += config.num_symbols
+            if index <= self.current_symbol:
+                delta = self.current_symbol - index
+            else:
+                delta = self.current_symbol + (config.num_symbols - index)
 
         num_steps = int(round(float(delta) * float(self.steps_per_symbol)))
 
@@ -186,8 +189,6 @@ class StargateControl:
 
         target_val = average + ((average / 100) * config.cal_percentage)
         print("Target val: {}".format(target_val))
-
-        #self.motor_gate.release()
         return target_val
 
     # Get the current LDR reading

@@ -28,7 +28,7 @@ class StargateLogic:
                 return
             self.address = address
 
-        if self.state > 2:
+        if self.state > 3:
             self.state = 0
 
     def loop(self):
