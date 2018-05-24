@@ -63,10 +63,33 @@
             </div>
         </div>
 
+        <div class="controls">
+            <div class="control" onclick="shutdown();">
+                Shutdown
+            </div>
+        </div>
+
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script type="text/javascript">
             let dialSeq = [];
             let enableDialing = true;
+            let checkDialingInt = 0;
+
+            function checkDialing() {
+                $.post({
+                    url: 'http://192.168.0.34/dialstatus'
+                })
+                .done(function(data, status, xhr) {
+                    if (xhr.status === 204) {
+                        clearInterval(checkDialingInt);
+
+                        dialSeq = [];
+                        $('.dial-sequence').html('');
+                        $('.dial-sequence').removeClass('dialing');
+                        enableDialing = true;
+                    }
+                });
+            }
 
             function dial() {
                 enableDialing = false;
@@ -80,14 +103,21 @@
                         sequence: dialSeq
                     })
                 })
+                .done(function() {
+                    checkDialingInt = setInterval(checkDialing, 2000);
+                })
                 .fail(function() {
                     alert('Could not send dialling sequence!');
-                })
-                .always(function() { 
                     dialSeq = [];
                     $('.dial-sequence').html('');
                     $('.dial-sequence').removeClass('dialing');
                     enableDialing = true;
+                });
+            }
+
+            function shutdown() {
+                $.post({
+                    url: 'http://192.168.0.34/shutdown'
                 });
             }
 

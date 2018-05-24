@@ -1,6 +1,7 @@
 import os
 import json
 from SimpleHTTPServer import SimpleHTTPRequestHandler
+from DialProgram import DialProgram
 
 # Useful stuff from: https://stackoverflow.com/a/46332163
 
@@ -14,6 +15,19 @@ class StargateHttpHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
         print('POST: {}'.format(self.path))
+
+        if self.path == '/shutdown':
+            os.system('systemctl poweroff')
+            self.send_response(200, 'OK')
+            return
+
+        if self.path == '/dialstatus':
+            if DialProgram.is_dialing:
+                self.send_response(200, '1')
+            else:
+                self.send_response(204, '0')
+            return
+
         if self.path != '/update':
             self.send_error(404)
             return

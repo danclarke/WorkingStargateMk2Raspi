@@ -3,7 +3,7 @@ import pygame
 
 class StargateAudio:
     def __init__(self):
-        pygame.mixer.init(44100)
+        pygame.mixer.init(44100, -16, 2, 2048)
 
     def is_playing(self):
         return pygame.mixer.music.get_busy()

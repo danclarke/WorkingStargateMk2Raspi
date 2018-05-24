@@ -16,9 +16,8 @@ class LightingControl:
 
     # Cycle through each chevron in turn with a delay between each
     def cycle_chevrons(self):
-        led_num = 1
-        for ledNum, chevron in enumerate(self.chevrons):
-            print('LED: {}'.format(led_num))
+        for led_num, chevron in enumerate(self.chevrons):
+            print('LED: {}'.format(led_num + 1))
             chevron.on()
             sleep(5)
             chevron.off()

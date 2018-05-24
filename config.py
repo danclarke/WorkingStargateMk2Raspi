@@ -7,27 +7,28 @@ from Adafruit_MotorHAT_Motors import Adafruit_MotorHAT
 #
 # To work out the chevon pin numbers, create a table, then run ChevonLighting.cycle_chevrons (see in main.py)
 #
-# 5: 8
-# 6: 4
-# 13: 6
-# 19: 7
-# 26: 5
-# 7: 3
-# 12: 0
-# 16: 1
-# 20: 2
+# 17: 8
+# 27: 4
+# 22: 6
+# 5: 7
+# 6: 5
+# 13: 3
+# 26: 0
+# 12: 1
+# 16: 2
 #
 # Enter the LED that lights up after the pin number, in the above example the first LED that lit up
 # was the last LED in the gate, '8'. Then te top '4'. And so on.
 #
 # Once the table is populated, enter the values into the pin array below, following LED order:
-pins_chevron = [12, 16, 20, 7, 6, 26, 13, 19, 5]
+# pins_chevron = [17, 27, 22, 5, 6, 13, 26, 12, 16] # Pin order
+pins_chevron = [26, 12, 16, 13, 27, 6, 22, 5, 17] # Actual order, COMMENT OUT when figuring out the order
 
 # Pin for the ramp LED
 pin_gantry = 24
 
 # Pin for the calibration LED
-pin_cal_led = 21
+pin_cal_led = 20
 
 # Pin for the CS of MCP3008 ADC chip
 pin_adc_cs = 8
@@ -79,10 +80,11 @@ ldr_index = 0           # Index of the LDR in the ADC chip
 cal_num_samples = 10    # Number of LDR samples to get background lighting levels
 cal_num_steps = 50      # Number of steps to move gate per sample
 home_initial_reverse = cal_steps_per_symbol * 2  # Number of steps to move backwards when performing an initial home
+audio_delay_time = 0.2  # Time between playback request, and actual playback
 
 num_symbols = 39
 num_chevrons = 9
 top_chevron = 4
 
 chevron_light_order = [5, 6, 7, 1, 2, 3, 0, 8]  # Order Chevrons will light up when dialing
-chevron_engage_time = 1.5  # Amount of time in seconds that the chevron will remain locked
+chevron_engage_time = 1.5 - audio_delay_time  # Amount of time in seconds that the chevron will remain locked

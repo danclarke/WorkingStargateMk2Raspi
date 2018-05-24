@@ -27,7 +27,7 @@ html {
             height: 200px;
             transform: scale(2);
             opacity: 0;
-            border: 1px solid green;
+            border: none;
             margin-right: 10px;
             cursor: auto;
             position: relative;
@@ -75,13 +75,32 @@ html {
     margin: 0 auto;
 }
 
-.animation {
-    display: inline-block;
-    border: 1px solid #00563f;
-    padding: 10px;
-    font-size: 22pt;
-    width: 200px;
-    margin: 50px 10px 0 0;
+    .animation {
+        display: inline-block;
+        border: 1px solid #00563f;
+        padding: 10px;
+        font-size: 22pt;
+        width: 200px;
+        margin: 50px 10px 0 0;
+        text-align: center;
+        cursor: pointer;
+    }
+
+.controls {
+    clear: both;
     text-align: center;
-    cursor: pointer;
+    max-width: 1470px;
+    margin: 0 auto;
 }
+
+    .control {
+        display: inline-block;
+        border: 1px solid red;
+        padding: 10px;
+        font-size: 22pt;
+        width: 200px;
+        margin: 50px 10px 0 0;
+        text-align: center;
+        cursor: pointer;
+    }
+
