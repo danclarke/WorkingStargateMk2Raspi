@@ -144,7 +144,8 @@ In Nano enter the following text:
 
 ```
 #!/bin/bash
-exec /usr/bin/python /home/pi/stargate/main.py
+cd /home/pi/stargate
+exec /usr/bin/python main.py
 ```
 
 Save the file, then execute the following:
